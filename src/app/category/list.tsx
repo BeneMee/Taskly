@@ -4,10 +4,12 @@ import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native
 
 import type { CustomCategory } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 export default function CategoriesScreen() {
   const router = useRouter();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const categories = useTaskStore((s) => s.categories);
   const templates = useTaskStore((s) => s.templates);
   const removeCategory = useTaskStore((s) => s.removeCategory);
@@ -40,13 +42,13 @@ export default function CategoriesScreen() {
         <Text style={styles.builtinHint}>Vordefiniert</Text>
       ) : (
         <Pressable hitSlop={8} onPress={() => onDelete(item)}>
-          <Ionicons name="trash-outline" size={20} color={colors.red} />
+          <Ionicons name="trash-outline" size={20} color={t.colors.red} />
         </Pressable>
       )}
       <Ionicons
         name="chevron-forward"
         size={20}
-        color={colors.textMuted}
+        color={t.colors.textMuted}
         style={{ marginLeft: spacing.sm }}
       />
     </Pressable>
@@ -63,7 +65,7 @@ export default function CategoriesScreen() {
           <Pressable
             style={styles.addButton}
             onPress={() => router.push('/category/edit')}>
-            <Ionicons name="add" size={20} color={colors.accent} />
+            <Ionicons name="add" size={20} color={t.colors.accent} />
             <Text style={styles.addText}>Kategorie</Text>
           </Pressable>
         }
@@ -72,39 +74,40 @@ export default function CategoriesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  listContent: { padding: spacing.lg },
-  addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xs,
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.md,
-    paddingVertical: spacing.md,
-    marginBottom: spacing.lg,
-  },
-  addText: { ...typography.label, color: colors.accent },
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-    ...shadow.card,
-  },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-  },
-  dot: { width: 8, height: 8, borderRadius: 4, marginRight: spacing.xs },
-  pillLabel: { fontSize: 13, fontWeight: '700' },
-  spacer: { flex: 1 },
-  builtinHint: { ...typography.caption },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.colors.background },
+    listContent: { padding: spacing.lg },
+    addButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.xs,
+      backgroundColor: t.colors.accentSoft,
+      borderRadius: radius.md,
+      paddingVertical: spacing.md,
+      marginBottom: spacing.lg,
+    },
+    addText: { ...t.typography.label, color: t.colors.accent },
+    card: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      padding: spacing.md,
+      marginBottom: spacing.sm,
+      ...t.shadow.card,
+    },
+    pill: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      borderRadius: radius.pill,
+      paddingHorizontal: spacing.sm,
+      paddingVertical: 4,
+    },
+    dot: { width: 8, height: 8, borderRadius: 4, marginRight: spacing.xs },
+    pillLabel: { fontSize: 13, fontWeight: '700' },
+    spacer: { flex: 1 },
+    builtinHint: { ...t.typography.caption },
+  });

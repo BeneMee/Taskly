@@ -9,10 +9,11 @@ import { WeekChart } from '@/components/WeekChart';
 import { computeStreak, dayColor, dayStats } from '@/lib/completion';
 import { daysOfMonth, daysOfWeek, toKey, todayKey } from '@/lib/dates';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useThemedStyles, type Theme } from '@/theme';
 
 export default function StatsScreen() {
   const insets = useSafeAreaInsets();
+  const styles = useThemedStyles(makeStyles);
   const templates = useTaskStore((s) => s.templates);
   const logs = useTaskStore((s) => s.logs);
   const openDates = useTaskStore((s) => s.openDates);
@@ -62,23 +63,24 @@ export default function StatsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.lg, paddingBottom: spacing.xxl },
-  heading: { ...typography.title, marginBottom: spacing.lg },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: spacing.lg,
-    marginTop: spacing.lg,
-    ...shadow.card,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.lg,
-  },
-  cardTitle: { ...typography.heading, textTransform: 'capitalize' },
-  cardBadge: { ...typography.label, color: colors.accent },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.colors.background },
+    content: { padding: spacing.lg, paddingBottom: spacing.xxl },
+    heading: { ...t.typography.title, marginBottom: spacing.lg },
+    card: {
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.lg,
+      padding: spacing.lg,
+      marginTop: spacing.lg,
+      ...t.shadow.card,
+    },
+    cardHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: spacing.lg,
+    },
+    cardTitle: { ...t.typography.heading, textTransform: 'capitalize' },
+    cardBadge: { ...t.typography.label, color: t.colors.accent },
+  });

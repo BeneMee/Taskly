@@ -5,9 +5,10 @@
 Daily-Habit-/To-Do-App mit **Expo (SDK 54)**, lauffähig in **Expo Go**. Siehe [SPEC.md](SPEC.md) und [docs/architecture.md](docs/architecture.md).
 
 ## Starten
-- `npm start` → Expo Dev Server, QR-Code in Expo Go scannen
-- `npm test` → Jest-Unit-Tests (reine Logik in `src/lib`)
+- `npm start` → Expo Dev Server, QR-Code in Expo Go scannen (`--tunnel` via @expo/ngrok bei Netzwerkproblemen)
+- `npm test` → Jest-Unit-Tests (reine Logik in `src/lib`); einzelner Test: `npx jest completion` oder `npx jest -t "computeStreak"`
 - `npx tsc --noEmit` → Typecheck
+- `npm run lint` → expo lint
 
 ## Architektur-Leitplanken
 - **Expo-Go-kompatibel bleiben:** keine Bibliotheken mit Custom-Native-Code. Aktuell genutzt: reanimated 4, gesture-handler, reorderable-list, async-storage. Diagramme sind bewusst plain RN Views (keine Chart-Lib).

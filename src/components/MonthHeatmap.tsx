@@ -4,7 +4,7 @@ import { dayColor, dayColorHex } from '@/lib/completion';
 import { daysOfMonth, toKey, todayKey, weekdayOf } from '@/lib/dates';
 import { WEEKDAY_LABELS } from '@/lib/types';
 import type { DailyLog, TaskTemplate } from '@/lib/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 interface Props {
   templates: TaskTemplate[];
@@ -13,6 +13,7 @@ interface Props {
 }
 
 export function MonthHeatmap({ templates, logs, openDates }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const today = todayKey();
   const days = daysOfMonth(today);
   const leadingBlanks = days.length > 0 ? weekdayOf(days[0]) : 0;
@@ -63,11 +64,13 @@ export function MonthHeatmap({ templates, logs, openDates }: Props) {
 }
 
 function Legend() {
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const items: { color: string; label: string }[] = [
-    { color: colors.green, label: 'Alles' },
-    { color: colors.yellow, label: '≥ 50 %' },
-    { color: colors.red, label: '< 50 %' },
-    { color: colors.neutral, label: 'Frei' },
+    { color: t.colors.green, label: 'Alles' },
+    { color: t.colors.yellow, label: '≥ 50 %' },
+    { color: t.colors.red, label: '< 50 %' },
+    { color: t.colors.neutral, label: 'Frei' },
   ];
   return (
     <View style={styles.legend}>
@@ -83,36 +86,37 @@ function Legend() {
 
 const COLUMN = `${100 / 7}%`;
 
-const styles = StyleSheet.create({
-  weekHeader: { flexDirection: 'row', marginBottom: spacing.xs },
-  weekHeaderText: {
-    width: COLUMN,
-    textAlign: 'center',
-    ...typography.caption,
-  },
-  grid: { flexDirection: 'row', flexWrap: 'wrap' },
-  cell: {
-    width: COLUMN,
-    aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 3,
-  },
-  dot: {
-    width: '100%',
-    height: '100%',
-    borderRadius: radius.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dotToday: { borderWidth: 2, borderColor: colors.text },
-  dayNum: { fontSize: 11, fontWeight: '600', color: '#00000066' },
-  legend: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.lg,
-  },
-  legendItem: { flexDirection: 'row', alignItems: 'center' },
-  legendDot: { width: 12, height: 12, borderRadius: 4, marginRight: spacing.xs },
-  legendText: { ...typography.caption },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    weekHeader: { flexDirection: 'row', marginBottom: spacing.xs },
+    weekHeaderText: {
+      width: COLUMN,
+      textAlign: 'center',
+      ...t.typography.caption,
+    },
+    grid: { flexDirection: 'row', flexWrap: 'wrap' },
+    cell: {
+      width: COLUMN,
+      aspectRatio: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 3,
+    },
+    dot: {
+      width: '100%',
+      height: '100%',
+      borderRadius: radius.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    dotToday: { borderWidth: 2, borderColor: t.colors.text },
+    dayNum: { fontSize: 11, fontWeight: '600', color: '#00000066' },
+    legend: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: spacing.lg,
+    },
+    legendItem: { flexDirection: 'row', alignItems: 'center' },
+    legendDot: { width: 12, height: 12, borderRadius: 4, marginRight: spacing.xs },
+    legendText: { ...t.typography.caption },
+  });

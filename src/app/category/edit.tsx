@@ -13,10 +13,12 @@ import {
 
 import { CATEGORY_COLORS, softFromColor } from '@/lib/categories';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 export default function EditCategoryScreen() {
   const router = useRouter();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const { id } = useLocalSearchParams<{ id?: string }>();
 
   const existing = useTaskStore((s) => s.categories.find((c) => c.id === id));
@@ -47,7 +49,7 @@ export default function EditCategoryScreen() {
         <TextInput
           style={styles.input}
           placeholder="z. B. Sport"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={t.colors.textMuted}
           value={label}
           onChangeText={setLabel}
           autoFocus={!existing}
@@ -92,44 +94,45 @@ export default function EditCategoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.lg },
-  label: { ...typography.label, marginBottom: spacing.sm },
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    fontSize: 16,
-    color: colors.text,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  swatchRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
-  swatch: { width: 40, height: 40, borderRadius: 20 },
-  swatchActive: {
-    borderWidth: 3,
-    borderColor: colors.text,
-  },
-  previewLabel: { ...typography.label, marginTop: spacing.xl, marginBottom: spacing.sm },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 6,
-  },
-  pillDot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.xs },
-  pillText: { fontSize: 14, fontWeight: '700' },
-  saveButton: {
-    marginTop: spacing.xxl,
-    backgroundColor: colors.accent,
-    borderRadius: radius.md,
-    paddingVertical: spacing.lg,
-    alignItems: 'center',
-  },
-  saveButtonDisabled: { backgroundColor: colors.textMuted },
-  saveText: { ...typography.body, color: colors.onAccent, fontWeight: '700' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    flex: { flex: 1, backgroundColor: t.colors.background },
+    content: { padding: spacing.lg },
+    label: { ...t.typography.label, marginBottom: spacing.sm },
+    input: {
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      fontSize: 16,
+      color: t.colors.text,
+      borderWidth: 1,
+      borderColor: t.colors.border,
+    },
+    swatchRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
+    swatch: { width: 40, height: 40, borderRadius: 20 },
+    swatchActive: {
+      borderWidth: 3,
+      borderColor: t.colors.text,
+    },
+    previewLabel: { ...t.typography.label, marginTop: spacing.xl, marginBottom: spacing.sm },
+    pill: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      borderRadius: radius.pill,
+      paddingHorizontal: spacing.md,
+      paddingVertical: 6,
+    },
+    pillDot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.xs },
+    pillText: { fontSize: 14, fontWeight: '700' },
+    saveButton: {
+      marginTop: spacing.xxl,
+      backgroundColor: t.colors.accent,
+      borderRadius: radius.md,
+      paddingVertical: spacing.lg,
+      alignItems: 'center',
+    },
+    saveButtonDisabled: { backgroundColor: t.colors.textMuted },
+    saveText: { ...t.typography.body, color: t.colors.onAccent, fontWeight: '700' },
+  });

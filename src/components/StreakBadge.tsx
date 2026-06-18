@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { dayColorHex } from '@/lib/completion';
 import type { DayColor } from '@/lib/types';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 interface Props {
   current: number;
@@ -13,7 +13,9 @@ interface Props {
 }
 
 export function StreakBadge({ current, longest, todayColor }: Props) {
-  const flameColor = todayColor === 'none' ? colors.textMuted : dayColorHex(todayColor);
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
+  const flameColor = todayColor === 'none' ? t.colors.textMuted : dayColorHex(todayColor);
   return (
     <View style={styles.card}>
       <View style={[styles.flameCircle, { backgroundColor: `${flameColor}22` }]}>
@@ -33,26 +35,27 @@ export function StreakBadge({ current, longest, todayColor }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    padding: spacing.lg,
-    ...shadow.card,
-  },
-  flameCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.lg,
-  },
-  textBlock: { flex: 1 },
-  count: { ...typography.title, fontSize: 24 },
-  label: { ...typography.caption },
-  longestBlock: { alignItems: 'center', paddingLeft: spacing.md },
-  longestCount: { ...typography.heading, color: colors.accent },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    card: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.lg,
+      padding: spacing.lg,
+      ...t.shadow.card,
+    },
+    flameCircle: {
+      width: 52,
+      height: 52,
+      borderRadius: 26,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: spacing.lg,
+    },
+    textBlock: { flex: 1 },
+    count: { ...t.typography.title, fontSize: 24 },
+    label: { ...t.typography.caption },
+    longestBlock: { alignItems: 'center', paddingLeft: spacing.md },
+    longestCount: { ...t.typography.heading, color: t.colors.accent },
+  });

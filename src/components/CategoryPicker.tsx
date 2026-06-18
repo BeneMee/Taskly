@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { CategoryId } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useThemedStyles, type Theme } from '@/theme';
 
 interface Props {
   value?: CategoryId;
@@ -12,6 +12,7 @@ interface Props {
 /** Auswahl der Kategorie inkl. Option „Keine". */
 export function CategoryPicker({ value, onChange }: Props) {
   const categories = useTaskStore((s) => s.categories);
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.row}>
       <Pressable
@@ -43,20 +44,21 @@ export function CategoryPicker({ value, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  chipActiveNeutral: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
-  dot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.xs },
-  chipText: { ...typography.label, color: colors.textSecondary },
-  chipTextActiveNeutral: { color: colors.accent },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    row: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+    chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.colors.surface,
+      borderWidth: 1,
+      borderColor: t.colors.border,
+      borderRadius: radius.pill,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    chipActiveNeutral: { backgroundColor: t.colors.accentSoft, borderColor: t.colors.accent },
+    dot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.xs },
+    chipText: { ...t.typography.label, color: t.colors.textSecondary },
+    chipTextActiveNeutral: { color: t.colors.accent },
+  });

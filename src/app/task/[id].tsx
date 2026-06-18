@@ -17,10 +17,12 @@ import { EmptyState } from '@/components/EmptyState';
 import { WeekdayPicker } from '@/components/WeekdayPicker';
 import type { CategoryId, Schedule } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 export default function EditTaskScreen() {
   const router = useRouter();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const template = useTaskStore((s) => s.templates.find((t) => t.id === id));
@@ -78,7 +80,7 @@ export default function EditTaskScreen() {
         <Text style={styles.label}>Titel</Text>
         <TextInput
           style={styles.input}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={t.colors.textMuted}
           value={title}
           onChangeText={setTitle}
           returnKeyType="done"
@@ -89,7 +91,7 @@ export default function EditTaskScreen() {
         <TextInput
           style={[styles.input, styles.notesInput]}
           placeholder="Optionale Notizen zur Aufgabe…"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={t.colors.textMuted}
           value={notes}
           onChangeText={setNotes}
           multiline
@@ -118,30 +120,35 @@ export default function EditTaskScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.lg },
-  label: { ...typography.label, marginBottom: spacing.sm },
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    fontSize: 16,
-    color: colors.text,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  notesInput: { minHeight: 96, paddingTop: spacing.md },
-  saveButton: {
-    marginTop: spacing.xxl,
-    backgroundColor: colors.accent,
-    borderRadius: radius.md,
-    paddingVertical: spacing.lg,
-    alignItems: 'center',
-  },
-  saveButtonDisabled: { backgroundColor: colors.textMuted },
-  saveText: { ...typography.body, color: colors.onAccent, fontWeight: '700' },
-  deleteButton: { marginTop: spacing.lg, paddingVertical: spacing.md, alignItems: 'center' },
-  deleteText: { ...typography.body, color: colors.red, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    flex: { flex: 1, backgroundColor: t.colors.background },
+    content: { padding: spacing.lg },
+    label: { ...t.typography.label, marginBottom: spacing.sm },
+    input: {
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      fontSize: 16,
+      color: t.colors.text,
+      borderWidth: 1,
+      borderColor: t.colors.border,
+    },
+    notesInput: { minHeight: 96, paddingTop: spacing.md },
+    saveButton: {
+      marginTop: spacing.xxl,
+      backgroundColor: t.colors.accent,
+      borderRadius: radius.md,
+      paddingVertical: spacing.lg,
+      alignItems: 'center',
+    },
+    saveButtonDisabled: { backgroundColor: t.colors.textMuted },
+    saveText: { ...t.typography.body, color: t.colors.onAccent, fontWeight: '700' },
+    deleteButton: {
+      marginTop: spacing.lg,
+      paddingVertical: spacing.md,
+      alignItems: 'center',
+    },
+    deleteText: { ...t.typography.body, color: t.colors.red, fontWeight: '600' },
+  });

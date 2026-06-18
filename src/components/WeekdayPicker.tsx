@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { WEEKDAY_LABELS } from '@/lib/types';
 import type { Schedule, Weekday } from '@/lib/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useThemedStyles, type Theme } from '@/theme';
 
 interface Props {
   value: Schedule;
@@ -12,6 +12,7 @@ interface Props {
 const ALL_DAYS: Weekday[] = [0, 1, 2, 3, 4, 5, 6];
 
 export function WeekdayPicker({ value, onChange }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const isDaily = value.kind === 'daily';
   const selectedDays = value.kind === 'weekdays' ? value.days : [];
 
@@ -73,6 +74,7 @@ function Segment({
   active: boolean;
   onPress: () => void;
 }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       onPress={onPress}
@@ -84,38 +86,39 @@ function Segment({
   );
 }
 
-const styles = StyleSheet.create({
-  segment: {
-    flexDirection: 'row',
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: radius.md,
-    padding: spacing.xs,
-    gap: spacing.xs,
-  },
-  segmentItem: {
-    flex: 1,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.sm,
-    alignItems: 'center',
-  },
-  segmentItemActive: { backgroundColor: colors.surface, ...{} },
-  segmentText: { ...typography.label, color: colors.textSecondary },
-  segmentTextActive: { color: colors.accent },
-  daysRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.md,
-    gap: spacing.xs,
-  },
-  dayChip: {
-    flex: 1,
-    aspectRatio: 1,
-    borderRadius: radius.sm,
-    backgroundColor: colors.surfaceAlt,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dayChipActive: { backgroundColor: colors.accent },
-  dayText: { ...typography.label, color: colors.textSecondary, fontSize: 12 },
-  dayTextActive: { color: colors.onAccent },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    segment: {
+      flexDirection: 'row',
+      backgroundColor: t.colors.surfaceAlt,
+      borderRadius: radius.md,
+      padding: spacing.xs,
+      gap: spacing.xs,
+    },
+    segmentItem: {
+      flex: 1,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.sm,
+      alignItems: 'center',
+    },
+    segmentItemActive: { backgroundColor: t.colors.surface },
+    segmentText: { ...t.typography.label, color: t.colors.textSecondary },
+    segmentTextActive: { color: t.colors.accent },
+    daysRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: spacing.md,
+      gap: spacing.xs,
+    },
+    dayChip: {
+      flex: 1,
+      aspectRatio: 1,
+      borderRadius: radius.sm,
+      backgroundColor: t.colors.surfaceAlt,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    dayChipActive: { backgroundColor: t.colors.accent },
+    dayText: { ...t.typography.label, color: t.colors.textSecondary, fontSize: 12 },
+    dayTextActive: { color: t.colors.onAccent },
+  });

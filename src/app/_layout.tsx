@@ -5,7 +5,38 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors } from '@/theme';
+import { ThemeProvider, useTheme } from '@/theme';
+
+function ThemedStack() {
+  const t = useTheme();
+  const modalOptions = {
+    presentation: 'modal' as const,
+    headerShown: true,
+    headerStyle: { backgroundColor: t.colors.surface },
+    headerTintColor: t.colors.text,
+  };
+
+  return (
+    <>
+      <StatusBar style={t.mode === 'dark' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: t.colors.background },
+        }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="task/new" options={{ ...modalOptions, title: 'Neue Aufgabe' }} />
+        <Stack.Screen
+          name="task/[id]"
+          options={{ ...modalOptions, title: 'Aufgabe bearbeiten' }}
+        />
+        <Stack.Screen name="category/list" options={{ ...modalOptions, title: 'Kategorien' }} />
+        <Stack.Screen name="category/edit" options={{ ...modalOptions, title: 'Kategorie' }} />
+        <Stack.Screen name="settings" options={{ ...modalOptions, title: 'Einstellungen' }} />
+      </Stack>
+    </>
+  );
+}
 
 export default function RootLayout() {
   const hydrated = useTaskStore((s) => s.hydrated);
@@ -19,34 +50,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <StatusBar style="dark" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
-          }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen
-            name="task/new"
-            options={{ presentation: 'modal', headerShown: true, title: 'Neue Aufgabe' }}
-          />
-          <Stack.Screen
-            name="task/[id]"
-            options={{
-              presentation: 'modal',
-              headerShown: true,
-              title: 'Aufgabe bearbeiten',
-            }}
-          />
-          <Stack.Screen
-            name="category/list"
-            options={{ presentation: 'modal', headerShown: true, title: 'Kategorien' }}
-          />
-          <Stack.Screen
-            name="category/edit"
-            options={{ presentation: 'modal', headerShown: true, title: 'Kategorie' }}
-          />
-        </Stack>
+        <ThemeProvider>
+          <ThemedStack />
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -12,6 +12,15 @@ import type {
   TaskStatus,
   TaskTemplate,
 } from '@/lib/types';
+import type { PaletteId, ThemeMode } from '@/theme/themes';
+
+/** Persistierte Darstellungs-Einstellungen (Theme). */
+export interface AppSettings {
+  palette: PaletteId;
+  mode: ThemeMode;
+}
+
+const DEFAULT_SETTINGS: AppSettings = { palette: 'indigo', mode: 'light' };
 
 const STORE_KEY = 'taskly-store-v2';
 const LEGACY_KEY = 'taskly-store-v1';
@@ -63,6 +72,7 @@ interface PersistedState {
   logs: DailyLog;
   openDates: string[];
   categories: CustomCategory[];
+  settings: AppSettings;
 }
 
 interface TaskState {
@@ -72,6 +82,8 @@ interface TaskState {
   openDates: string[];
   /** Verwaltbare Kategorien (inkl. der 3 Builtins). */
   categories: CustomCategory[];
+  /** Darstellungs-Einstellungen (Akzent-Palette + Light/Dark). */
+  settings: AppSettings;
   /** true, sobald die persistierten Daten geladen wurden. */
   hydrated: boolean;
 
@@ -99,6 +111,10 @@ interface TaskState {
   reorder: (orderedIds: string[]) => void;
   setStatus: (dateKey: string, taskId: string, status: TaskStatus) => void;
   registerOpen: () => void;
+  /** Setzt die Akzent-Palette. */
+  setPalette: (palette: PaletteId) => void;
+  /** Setzt den Light/Dark-Modus. */
+  setMode: (mode: ThemeMode) => void;
   setHydrated: () => void;
 }
 
@@ -109,6 +125,7 @@ export const useTaskStore = create<TaskState>()(
       logs: {},
       openDates: [],
       categories: [...DEFAULT_CATEGORIES],
+      settings: { ...DEFAULT_SETTINGS },
       hydrated: false,
 
       addTask: (title, schedule, category, notes) =>
@@ -227,6 +244,11 @@ export const useTaskStore = create<TaskState>()(
           return { openDates: [...state.openDates, key] };
         }),
 
+      setPalette: (palette) =>
+        set((state) => ({ settings: { ...state.settings, palette } })),
+
+      setMode: (mode) => set((state) => ({ settings: { ...state.settings, mode } })),
+
       setHydrated: () => set({ hydrated: true }),
     }),
     {
@@ -237,6 +259,7 @@ export const useTaskStore = create<TaskState>()(
         logs: state.logs,
         openDates: state.openDates,
         categories: state.categories,
+        settings: state.settings,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated();

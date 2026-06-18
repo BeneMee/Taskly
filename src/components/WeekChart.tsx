@@ -4,7 +4,7 @@ import { dayColor, dayColorHex, dayStats } from '@/lib/completion';
 import { daysOfWeek, toKey, todayKey } from '@/lib/dates';
 import { WEEKDAY_LABELS } from '@/lib/types';
 import type { DailyLog, TaskTemplate } from '@/lib/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 interface Props {
   templates: TaskTemplate[];
@@ -15,6 +15,8 @@ interface Props {
 const MAX_BAR_HEIGHT = 120;
 
 export function WeekChart({ templates, logs, openDates }: Props) {
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const today = todayKey();
   const days = daysOfWeek(today);
   const data = days.map((date, i) => {
@@ -41,7 +43,7 @@ export function WeekChart({ templates, logs, openDates }: Props) {
               <View
                 style={[
                   styles.bar,
-                  { height, backgroundColor: d.done > 0 ? d.color : colors.neutral },
+                  { height, backgroundColor: d.done > 0 ? d.color : t.colors.neutral },
                 ]}
               />
             </View>
@@ -53,17 +55,18 @@ export function WeekChart({ templates, logs, openDates }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    height: MAX_BAR_HEIGHT + 48,
-  },
-  column: { flex: 1, alignItems: 'center', justifyContent: 'flex-end' },
-  track: { justifyContent: 'flex-end', height: MAX_BAR_HEIGHT },
-  bar: { width: 22, borderRadius: radius.sm },
-  value: { ...typography.caption, marginBottom: spacing.xs, height: 16 },
-  label: { ...typography.caption, marginTop: spacing.sm },
-  labelToday: { color: colors.accent, fontWeight: '800' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'space-between',
+      height: MAX_BAR_HEIGHT + 48,
+    },
+    column: { flex: 1, alignItems: 'center', justifyContent: 'flex-end' },
+    track: { justifyContent: 'flex-end', height: MAX_BAR_HEIGHT },
+    bar: { width: 22, borderRadius: radius.sm },
+    value: { ...t.typography.caption, marginBottom: spacing.xs, height: 16 },
+    label: { ...t.typography.caption, marginTop: spacing.sm },
+    labelToday: { color: t.colors.accent, fontWeight: '800' },
+  });

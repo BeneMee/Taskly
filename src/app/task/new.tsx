@@ -8,17 +8,18 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
 } from 'react-native';
 
 import { CategoryPicker } from '@/components/CategoryPicker';
 import { WeekdayPicker } from '@/components/WeekdayPicker';
 import type { CategoryId, Schedule } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 export default function NewTaskScreen() {
   const router = useRouter();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const addTask = useTaskStore((s) => s.addTask);
 
   const [title, setTitle] = useState('');
@@ -45,7 +46,7 @@ export default function NewTaskScreen() {
         <TextInput
           style={styles.input}
           placeholder="z. B. 30 Minuten lesen"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={t.colors.textMuted}
           value={title}
           onChangeText={setTitle}
           autoFocus
@@ -57,7 +58,7 @@ export default function NewTaskScreen() {
         <TextInput
           style={[styles.input, styles.notesInput]}
           placeholder="Optionale Notizen zur Aufgabe…"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={t.colors.textMuted}
           value={notes}
           onChangeText={setNotes}
           multiline
@@ -82,28 +83,29 @@ export default function NewTaskScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.lg },
-  label: { ...typography.label, marginBottom: spacing.sm },
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    fontSize: 16,
-    color: colors.text,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  notesInput: { minHeight: 96, paddingTop: spacing.md },
-  saveButton: {
-    marginTop: spacing.xxl,
-    backgroundColor: colors.accent,
-    borderRadius: radius.md,
-    paddingVertical: spacing.lg,
-    alignItems: 'center',
-  },
-  saveButtonDisabled: { backgroundColor: colors.textMuted },
-  saveText: { ...typography.body, color: colors.onAccent, fontWeight: '700' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    flex: { flex: 1, backgroundColor: t.colors.background },
+    content: { padding: spacing.lg },
+    label: { ...t.typography.label, marginBottom: spacing.sm },
+    input: {
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      fontSize: 16,
+      color: t.colors.text,
+      borderWidth: 1,
+      borderColor: t.colors.border,
+    },
+    notesInput: { minHeight: 96, paddingTop: spacing.md },
+    saveButton: {
+      marginTop: spacing.xxl,
+      backgroundColor: t.colors.accent,
+      borderRadius: radius.md,
+      paddingVertical: spacing.lg,
+      alignItems: 'center',
+    },
+    saveButtonDisabled: { backgroundColor: t.colors.textMuted },
+    saveText: { ...t.typography.body, color: t.colors.onAccent, fontWeight: '700' },
+  });

@@ -8,11 +8,13 @@ import { EmptyState } from '@/components/EmptyState';
 import { scheduleLabel } from '@/lib/tasks';
 import type { TaskTemplate } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 export default function TasksScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const templates = useTaskStore((s) => s.templates);
 
   const sorted = [...templates].sort(
@@ -25,7 +27,7 @@ export default function TasksScreen() {
         <Ionicons
           name={item.schedule.kind === 'daily' ? 'repeat' : 'calendar-outline'}
           size={18}
-          color={colors.accent}
+          color={t.colors.accent}
         />
       </View>
       <View style={styles.textBlock}>
@@ -36,11 +38,11 @@ export default function TasksScreen() {
           <Text style={styles.schedule}>{scheduleLabel(item.schedule)}</Text>
           <CategoryTag category={item.category} />
           {!!item.notes && (
-            <Ionicons name="document-text-outline" size={14} color={colors.textMuted} />
+            <Ionicons name="document-text-outline" size={14} color={t.colors.textMuted} />
           )}
         </View>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={20} color={t.colors.textMuted} />
     </Pressable>
   );
 
@@ -58,7 +60,7 @@ export default function TasksScreen() {
               style={styles.headerButton}
               hitSlop={8}
               onPress={() => router.push('/category/list')}>
-              <Ionicons name="pricetags-outline" size={22} color={colors.accent} />
+              <Ionicons name="pricetags-outline" size={22} color={t.colors.accent} />
             </Pressable>
           </View>
         }
@@ -71,63 +73,64 @@ export default function TasksScreen() {
         }
       />
       <Pressable style={styles.fab} onPress={() => router.push('/task/new')}>
-        <Ionicons name="add" size={32} color={colors.onAccent} />
+        <Ionicons name="add" size={32} color={t.colors.onAccent} />
       </Pressable>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  listContent: { padding: spacing.lg, paddingBottom: 120 },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: spacing.lg,
-  },
-  heading: { ...typography.title },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.accentSoft,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-    ...shadow.card,
-  },
-  iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.accentSoft,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.md,
-  },
-  textBlock: { flex: 1 },
-  title: { ...typography.body },
-  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
-  schedule: { ...typography.caption },
-  fab: {
-    position: 'absolute',
-    right: spacing.lg,
-    bottom: spacing.lg,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...shadow.card,
-    shadowOpacity: 0.2,
-  },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.colors.background },
+    listContent: { padding: spacing.lg, paddingBottom: 120 },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: spacing.lg,
+    },
+    heading: { ...t.typography.title },
+    headerButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: t.colors.accentSoft,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      padding: spacing.md,
+      marginBottom: spacing.sm,
+      ...t.shadow.card,
+    },
+    iconCircle: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: t.colors.accentSoft,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: spacing.md,
+    },
+    textBlock: { flex: 1 },
+    title: { ...t.typography.body },
+    metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
+    schedule: { ...t.typography.caption },
+    fab: {
+      position: 'absolute',
+      right: spacing.lg,
+      bottom: spacing.lg,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: t.colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...t.shadow.card,
+      shadowOpacity: 0.2,
+    },
+  });

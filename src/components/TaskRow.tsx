@@ -5,7 +5,7 @@ import { useReorderableDrag } from 'react-native-reorderable-list';
 
 import { scheduleLabel } from '@/lib/tasks';
 import type { CategoryId, Schedule, TaskStatus } from '@/lib/types';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 import { CategoryTag } from './CategoryTag';
 
@@ -26,6 +26,8 @@ function TaskRowComponent({
   onToggleDone,
   onToggleIgnore,
 }: TaskRowProps) {
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const drag = useReorderableDrag();
   const done = status === 'done';
   const ignored = status === 'ignored';
@@ -38,8 +40,8 @@ function TaskRowComponent({
         hitSlop={8}
         disabled={ignored}
         style={[styles.checkbox, done && styles.checkboxDone]}>
-        {done && <Ionicons name="checkmark" size={18} color={colors.onAccent} />}
-        {ignored && <Ionicons name="remove" size={18} color={colors.textMuted} />}
+        {done && <Ionicons name="checkmark" size={18} color={t.colors.onAccent} />}
+        {ignored && <Ionicons name="remove" size={18} color={t.colors.textMuted} />}
       </Pressable>
 
       {/* Titel + Zeitplan */}
@@ -69,13 +71,13 @@ function TaskRowComponent({
         <Ionicons
           name={ignored ? 'arrow-undo-outline' : 'eye-off-outline'}
           size={20}
-          color={colors.textMuted}
+          color={t.colors.textMuted}
         />
       </Pressable>
 
       {/* Drag-Handle (lange drücken zum Sortieren) */}
       <Pressable onLongPress={drag} delayLongPress={200} style={styles.iconButton}>
-        <Ionicons name="reorder-three-outline" size={24} color={colors.textMuted} />
+        <Ionicons name="reorder-three-outline" size={24} color={t.colors.textMuted} />
       </Pressable>
     </View>
   );
@@ -83,34 +85,35 @@ function TaskRowComponent({
 
 export const TaskRow = memo(TaskRowComponent);
 
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.sm,
-    ...shadow.card,
-  },
-  cardIgnored: { opacity: 0.55 },
-  checkbox: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    borderWidth: 2,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.md,
-  },
-  checkboxDone: { backgroundColor: colors.accent, borderColor: colors.accent },
-  textBlock: { flex: 1 },
-  title: { ...typography.body },
-  titleDone: { textDecorationLine: 'line-through', color: colors.textMuted },
-  titleIgnored: { color: colors.textMuted },
-  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
-  schedule: { ...typography.caption },
-  iconButton: { padding: spacing.xs, marginLeft: spacing.xs },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    card: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.colors.surface,
+      borderRadius: radius.md,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.md,
+      marginBottom: spacing.sm,
+      ...t.shadow.card,
+    },
+    cardIgnored: { opacity: 0.55 },
+    checkbox: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      borderWidth: 2,
+      borderColor: t.colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: spacing.md,
+    },
+    checkboxDone: { backgroundColor: t.colors.accent, borderColor: t.colors.accent },
+    textBlock: { flex: 1 },
+    title: { ...t.typography.body },
+    titleDone: { textDecorationLine: 'line-through', color: t.colors.textMuted },
+    titleIgnored: { color: t.colors.textMuted },
+    metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
+    schedule: { ...t.typography.caption },
+    iconButton: { padding: spacing.xs, marginLeft: spacing.xs },
+  });

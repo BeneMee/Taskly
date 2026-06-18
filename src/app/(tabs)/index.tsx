@@ -18,7 +18,7 @@ import { todayKey } from '@/lib/dates';
 import { activeTemplatesFor } from '@/lib/tasks';
 import type { CategoryId, Schedule, TaskStatus } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
-import { colors, radius, shadow, spacing, typography } from '@/theme';
+import { radius, spacing, useTheme, useThemedStyles, type Theme } from '@/theme';
 
 interface Row {
   id: string;
@@ -31,6 +31,8 @@ interface Row {
 export default function TodayScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const t = useTheme();
+  const styles = useThemedStyles(makeStyles);
 
   const templates = useTaskStore((s) => s.templates);
   const logs = useTaskStore((s) => s.logs);
@@ -91,7 +93,15 @@ export default function TodayScreen() {
         ListHeaderComponent={
           <View>
             <Text style={styles.date}>{dateLabel}</Text>
-            <Text style={styles.title}>Heute</Text>
+            <View style={styles.headerRow}>
+              <Text style={styles.title}>Heute</Text>
+              <Pressable
+                style={styles.headerButton}
+                hitSlop={8}
+                onPress={() => router.push('/settings')}>
+                <Ionicons name="settings-outline" size={22} color={t.colors.accent} />
+              </Pressable>
+            </View>
             <StreakBadge
               current={streak.current}
               longest={streak.longest}
@@ -123,35 +133,54 @@ export default function TodayScreen() {
       <Pressable
         style={[styles.fab, { bottom: spacing.lg }]}
         onPress={() => router.push('/task/new')}>
-        <Ionicons name="add" size={32} color={colors.onAccent} />
+        <Ionicons name="add" size={32} color={t.colors.onAccent} />
       </Pressable>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  listContent: { padding: spacing.lg, paddingBottom: 120 },
-  date: { ...typography.label, color: colors.textSecondary, textTransform: 'capitalize' },
-  title: { ...typography.title, marginBottom: spacing.lg },
-  progressCard: {
-    marginTop: spacing.md,
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.md,
-    padding: spacing.md,
-  },
-  progressText: { ...typography.label, color: colors.accent },
-  progressSub: { ...typography.caption, marginTop: 2 },
-  fab: {
-    position: 'absolute',
-    right: spacing.lg,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...shadow.card,
-    shadowOpacity: 0.2,
-  },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.colors.background },
+    listContent: { padding: spacing.lg, paddingBottom: 120 },
+    date: {
+      ...t.typography.label,
+      color: t.colors.textSecondary,
+      textTransform: 'capitalize',
+    },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: spacing.lg,
+    },
+    title: { ...t.typography.title },
+    headerButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: t.colors.accentSoft,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    progressCard: {
+      marginTop: spacing.md,
+      backgroundColor: t.colors.accentSoft,
+      borderRadius: radius.md,
+      padding: spacing.md,
+    },
+    progressText: { ...t.typography.label, color: t.colors.accent },
+    progressSub: { ...t.typography.caption, marginTop: 2 },
+    fab: {
+      position: 'absolute',
+      right: spacing.lg,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: t.colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...t.shadow.card,
+      shadowOpacity: 0.2,
+    },
+  });
