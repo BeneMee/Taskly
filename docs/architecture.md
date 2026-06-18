@@ -22,7 +22,8 @@ type Weekday = 0..6;                 // 0 = Montag … 6 = Sonntag
 type Schedule = {kind:'daily'} | {kind:'weekdays'; days: Weekday[]};
 type TaskStatus = 'open' | 'done' | 'ignored';
 
-interface TaskTemplate { id; title; schedule; order; createdAt; archived? }
+type CategoryId = 'social' | 'leisure' | 'work';   // optional, Metadaten in lib/categories.ts
+interface TaskTemplate { id; title; schedule; order; createdAt; category?; archived? }
 type DailyLog = Record<dateKey, Record<taskId, 'done' | 'ignored'>>; // 'open' = Default, nicht gespeichert
 ```
 
@@ -43,6 +44,7 @@ src/
     index.ts        Farben, Spacing, Typografie (Light, freundlich)
   components/
     TaskRow · StreakBadge · WeekdayPicker · WeekChart · MonthHeatmap · EmptyState
+    CategoryPicker (Modals) · CategoryTag (farbiges Pill in den Listen)
   app/
     _layout.tsx          Root: GestureHandlerRootView + Stack; registerOpen() beim Mount
     (tabs)/_layout.tsx   Tabs: Heute · Aufgaben · Statistik

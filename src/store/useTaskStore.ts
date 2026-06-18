@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { todayKey } from '@/lib/dates';
-import type { DailyLog, Schedule, TaskStatus, TaskTemplate } from '@/lib/types';
+import type { CategoryId, DailyLog, Schedule, TaskStatus, TaskTemplate } from '@/lib/types';
 
 function makeId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -18,8 +18,11 @@ interface TaskState {
   hydrated: boolean;
 
   // Aktionen
-  addTask: (title: string, schedule: Schedule) => void;
-  updateTask: (id: string, patch: Partial<Pick<TaskTemplate, 'title' | 'schedule'>>) => void;
+  addTask: (title: string, schedule: Schedule, category?: CategoryId) => void;
+  updateTask: (
+    id: string,
+    patch: Partial<Pick<TaskTemplate, 'title' | 'schedule' | 'category'>>,
+  ) => void;
   removeTask: (id: string) => void;
   /** Setzt die Reihenfolge der sichtbaren Aufgaben (Liste ihrer IDs in neuer Reihenfolge). */
   reorder: (orderedIds: string[]) => void;
@@ -36,7 +39,7 @@ export const useTaskStore = create<TaskState>()(
       openDates: [],
       hydrated: false,
 
-      addTask: (title, schedule) =>
+      addTask: (title, schedule, category) =>
         set((state) => {
           const maxOrder = state.templates.reduce((m, t) => Math.max(m, t.order), -1);
           const task: TaskTemplate = {
@@ -45,6 +48,7 @@ export const useTaskStore = create<TaskState>()(
             schedule,
             order: maxOrder + 1,
             createdAt: new Date().toISOString(),
+            category,
           };
           return { templates: [...state.templates, task] };
         }),

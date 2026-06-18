@@ -12,9 +12,10 @@ import {
   View,
 } from 'react-native';
 
+import { CategoryPicker } from '@/components/CategoryPicker';
 import { EmptyState } from '@/components/EmptyState';
 import { WeekdayPicker } from '@/components/WeekdayPicker';
-import type { Schedule } from '@/lib/types';
+import type { CategoryId, Schedule } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
 import { colors, radius, spacing, typography } from '@/theme';
 
@@ -30,6 +31,7 @@ export default function EditTaskScreen() {
   const [schedule, setSchedule] = useState<Schedule>(
     template?.schedule ?? { kind: 'daily' },
   );
+  const [category, setCategory] = useState<CategoryId | undefined>(template?.category);
 
   if (!template) {
     return (
@@ -49,7 +51,7 @@ export default function EditTaskScreen() {
 
   const onSave = () => {
     if (!canSave) return;
-    updateTask(template.id, { title, schedule });
+    updateTask(template.id, { title, schedule, category });
     router.back();
   };
 
@@ -84,6 +86,9 @@ export default function EditTaskScreen() {
 
         <Text style={[styles.label, { marginTop: spacing.xl }]}>Wiederholung</Text>
         <WeekdayPicker value={schedule} onChange={setSchedule} />
+
+        <Text style={[styles.label, { marginTop: spacing.xl }]}>Kategorie</Text>
+        <CategoryPicker value={category} onChange={setCategory} />
 
         <Pressable
           style={[styles.saveButton, !canSave && styles.saveButtonDisabled]}

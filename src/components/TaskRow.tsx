@@ -4,13 +4,16 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useReorderableDrag } from 'react-native-reorderable-list';
 
 import { scheduleLabel } from '@/lib/tasks';
-import type { Schedule, TaskStatus } from '@/lib/types';
+import type { CategoryId, Schedule, TaskStatus } from '@/lib/types';
 import { colors, radius, shadow, spacing, typography } from '@/theme';
+
+import { CategoryTag } from './CategoryTag';
 
 export interface TaskRowProps {
   title: string;
   schedule: Schedule;
   status: TaskStatus;
+  category?: CategoryId;
   onToggleDone: () => void;
   onToggleIgnore: () => void;
 }
@@ -19,6 +22,7 @@ function TaskRowComponent({
   title,
   schedule,
   status,
+  category,
   onToggleDone,
   onToggleIgnore,
 }: TaskRowProps) {
@@ -52,9 +56,12 @@ function TaskRowComponent({
           numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.schedule}>
-          {ignored ? 'Heute ignoriert' : scheduleLabel(schedule)}
-        </Text>
+        <View style={styles.metaRow}>
+          <Text style={styles.schedule}>
+            {ignored ? 'Heute ignoriert' : scheduleLabel(schedule)}
+          </Text>
+          {!ignored && <CategoryTag category={category} />}
+        </View>
       </Pressable>
 
       {/* Ignorieren / Wiederherstellen */}
@@ -103,6 +110,7 @@ const styles = StyleSheet.create({
   title: { ...typography.body },
   titleDone: { textDecorationLine: 'line-through', color: colors.textMuted },
   titleIgnored: { color: colors.textMuted },
-  schedule: { ...typography.caption, marginTop: 2 },
+  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
+  schedule: { ...typography.caption },
   iconButton: { padding: spacing.xs, marginLeft: spacing.xs },
 });

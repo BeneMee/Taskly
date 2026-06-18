@@ -19,6 +19,7 @@ Tägliche Routine-Aufgaben abhaken, optional bestimmten Wochentagen zuordnen, Fo
    - 🔴 **rot** = eingeloggt, aber < 50 % erledigt
    - ⚪ neutral = an dem Tag nicht eingeloggt / keine Aufgaben
 6. **Drag & Drop** – Aufgaben lassen sich per Drag & Drop sortieren; die Reihenfolge wird persistiert.
+7. **Kategorien** – Eine Aufgabe kann optional einer von drei festen Kategorien zugeordnet werden, dargestellt als farbiges Pill mit Textlabel: Social (🟢 grün), Leisure (🟡 gelb), Work (🔴 rot). „Keine" ist möglich. Die Pills tragen immer auch den Text, da sich die Farben mit den Tagesfarben überschneiden.
 
 ## Nicht-funktionale Anforderungen
 

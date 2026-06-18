@@ -16,7 +16,7 @@ import { TaskRow } from '@/components/TaskRow';
 import { computeStreak, dayColor, dayStats, statusOf } from '@/lib/completion';
 import { todayKey } from '@/lib/dates';
 import { activeTemplatesFor } from '@/lib/tasks';
-import type { Schedule, TaskStatus } from '@/lib/types';
+import type { CategoryId, Schedule, TaskStatus } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
 import { colors, radius, shadow, spacing, typography } from '@/theme';
 
@@ -25,6 +25,7 @@ interface Row {
   title: string;
   schedule: Schedule;
   status: TaskStatus;
+  category?: CategoryId;
 }
 
 export default function TodayScreen() {
@@ -44,6 +45,7 @@ export default function TodayScreen() {
     title: t.title,
     schedule: t.schedule,
     status: statusOf(today, t.id, logs),
+    category: t.category,
   }));
 
   const streak = computeStreak(openDates, today);
@@ -64,6 +66,7 @@ export default function TodayScreen() {
         title={item.title}
         schedule={item.schedule}
         status={item.status}
+        category={item.category}
         onToggleDone={() =>
           setStatus(today, item.id, item.status === 'done' ? 'open' : 'done')
         }

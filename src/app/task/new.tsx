@@ -11,8 +11,9 @@ import {
   View,
 } from 'react-native';
 
+import { CategoryPicker } from '@/components/CategoryPicker';
 import { WeekdayPicker } from '@/components/WeekdayPicker';
-import type { Schedule } from '@/lib/types';
+import type { CategoryId, Schedule } from '@/lib/types';
 import { useTaskStore } from '@/store/useTaskStore';
 import { colors, radius, spacing, typography } from '@/theme';
 
@@ -22,6 +23,7 @@ export default function NewTaskScreen() {
 
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState<Schedule>({ kind: 'daily' });
+  const [category, setCategory] = useState<CategoryId | undefined>(undefined);
 
   const canSave =
     title.trim().length > 0 &&
@@ -29,7 +31,7 @@ export default function NewTaskScreen() {
 
   const onSave = () => {
     if (!canSave) return;
-    addTask(title, schedule);
+    addTask(title, schedule, category);
     router.back();
   };
 
@@ -52,6 +54,9 @@ export default function NewTaskScreen() {
 
         <Text style={[styles.label, { marginTop: spacing.xl }]}>Wiederholung</Text>
         <WeekdayPicker value={schedule} onChange={setSchedule} />
+
+        <Text style={[styles.label, { marginTop: spacing.xl }]}>Kategorie</Text>
+        <CategoryPicker value={category} onChange={setCategory} />
 
         <Pressable
           style={[styles.saveButton, !canSave && styles.saveButtonDisabled]}

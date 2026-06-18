@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CategoryTag } from '@/components/CategoryTag';
 import { EmptyState } from '@/components/EmptyState';
 import { scheduleLabel } from '@/lib/tasks';
 import type { TaskTemplate } from '@/lib/types';
@@ -31,7 +32,10 @@ export default function TasksScreen() {
         <Text style={styles.title} numberOfLines={1}>
           {item.title}
         </Text>
-        <Text style={styles.schedule}>{scheduleLabel(item.schedule)}</Text>
+        <View style={styles.metaRow}>
+          <Text style={styles.schedule}>{scheduleLabel(item.schedule)}</Text>
+          <CategoryTag category={item.category} />
+        </View>
       </View>
       <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
     </Pressable>
@@ -84,7 +88,8 @@ const styles = StyleSheet.create({
   },
   textBlock: { flex: 1 },
   title: { ...typography.body },
-  schedule: { ...typography.caption, marginTop: 2 },
+  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: spacing.sm },
+  schedule: { ...typography.caption },
   fab: {
     position: 'absolute',
     right: spacing.lg,
