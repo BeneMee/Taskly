@@ -24,6 +24,7 @@ export default function NewTaskScreen() {
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState<Schedule>({ kind: 'daily' });
   const [category, setCategory] = useState<CategoryId | undefined>(undefined);
+  const [notes, setNotes] = useState('');
 
   const canSave =
     title.trim().length > 0 &&
@@ -31,7 +32,7 @@ export default function NewTaskScreen() {
 
   const onSave = () => {
     if (!canSave) return;
-    addTask(title, schedule, category);
+    addTask(title, schedule, category, notes);
     router.back();
   };
 
@@ -50,6 +51,18 @@ export default function NewTaskScreen() {
           autoFocus
           returnKeyType="done"
           onSubmitEditing={onSave}
+        />
+
+        <Text style={[styles.label, { marginTop: spacing.xl }]}>Notizen</Text>
+        <TextInput
+          style={[styles.input, styles.notesInput]}
+          placeholder="Optionale Notizen zur Aufgabe…"
+          placeholderTextColor={colors.textMuted}
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
         />
 
         <Text style={[styles.label, { marginTop: spacing.xl }]}>Wiederholung</Text>
@@ -83,6 +96,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  notesInput: { minHeight: 96, paddingTop: spacing.md },
   saveButton: {
     marginTop: spacing.xxl,
     backgroundColor: colors.accent,

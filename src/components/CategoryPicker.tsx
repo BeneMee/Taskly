@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { CATEGORIES } from '@/lib/categories';
 import type { CategoryId } from '@/lib/types';
+import { useTaskStore } from '@/store/useTaskStore';
 import { colors, radius, spacing, typography } from '@/theme';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 
 /** Auswahl der Kategorie inkl. Option „Keine". */
 export function CategoryPicker({ value, onChange }: Props) {
+  const categories = useTaskStore((s) => s.categories);
   return (
     <View style={styles.row}>
       <Pressable
@@ -21,7 +22,7 @@ export function CategoryPicker({ value, onChange }: Props) {
         </Text>
       </Pressable>
 
-      {CATEGORIES.map((cat) => {
+      {categories.map((cat) => {
         const active = value === cat.id;
         return (
           <Pressable

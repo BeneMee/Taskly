@@ -32,6 +32,7 @@ export default function EditTaskScreen() {
     template?.schedule ?? { kind: 'daily' },
   );
   const [category, setCategory] = useState<CategoryId | undefined>(template?.category);
+  const [notes, setNotes] = useState(template?.notes ?? '');
 
   if (!template) {
     return (
@@ -51,7 +52,7 @@ export default function EditTaskScreen() {
 
   const onSave = () => {
     if (!canSave) return;
-    updateTask(template.id, { title, schedule, category });
+    updateTask(template.id, { title, schedule, category, notes });
     router.back();
   };
 
@@ -82,6 +83,18 @@ export default function EditTaskScreen() {
           onChangeText={setTitle}
           returnKeyType="done"
           onSubmitEditing={onSave}
+        />
+
+        <Text style={[styles.label, { marginTop: spacing.xl }]}>Notizen</Text>
+        <TextInput
+          style={[styles.input, styles.notesInput]}
+          placeholder="Optionale Notizen zur Aufgabe…"
+          placeholderTextColor={colors.textMuted}
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
         />
 
         <Text style={[styles.label, { marginTop: spacing.xl }]}>Wiederholung</Text>
@@ -119,6 +132,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  notesInput: { minHeight: 96, paddingTop: spacing.md },
   saveButton: {
     marginTop: spacing.xxl,
     backgroundColor: colors.accent,

@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { getCategory } from '@/lib/categories';
+import { getCategoryFrom } from '@/lib/categories';
 import type { CategoryId } from '@/lib/types';
+import { useTaskStore } from '@/store/useTaskStore';
 import { radius, spacing } from '@/theme';
 
 interface Props {
@@ -10,7 +11,8 @@ interface Props {
 
 /** Kleines farbiges Pill mit Punkt + Textlabel (z. B. grünes „Social"). */
 export function CategoryTag({ category }: Props) {
-  const meta = getCategory(category);
+  const categories = useTaskStore((s) => s.categories);
+  const meta = getCategoryFrom(categories, category);
   if (!meta) return null;
   return (
     <View style={[styles.pill, { backgroundColor: meta.soft }]}>

@@ -38,6 +38,14 @@ export default function RootLayout() {
               title: 'Aufgabe bearbeiten',
             }}
           />
+          <Stack.Screen
+            name="category/list"
+            options={{ presentation: 'modal', headerShown: true, title: 'Kategorien' }}
+          />
+          <Stack.Screen
+            name="category/edit"
+            options={{ presentation: 'modal', headerShown: true, title: 'Kategorie' }}
+          />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>

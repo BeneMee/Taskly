@@ -15,8 +15,21 @@ export const WEEKDAY_LABELS_LONG: readonly string[] = [
 /** Zeitplan einer Aufgabe: jeden Tag oder an ausgewählten Wochentagen. */
 export type Schedule = { kind: 'daily' } | { kind: 'weekdays'; days: Weekday[] };
 
-/** Kategorie einer Aufgabe (optional). Metadaten in src/lib/categories.ts. */
-export type CategoryId = 'social' | 'leisure' | 'work';
+/** Kategorie-Id (frei wählbar). Metadaten in src/lib/categories.ts / im Store. */
+export type CategoryId = string;
+
+/** Vom Nutzer verwaltbare Kategorie. */
+export interface CustomCategory {
+  /** uuid/makeId; für Builtins stabil 'social' | 'leisure' | 'work'. */
+  id: string;
+  label: string;
+  /** Kräftige Tag-Farbe (Hex, z. B. '#34C759'). */
+  color: string;
+  /** Heller Hintergrund (aus color abgeleitet, z. B. '#E3F8E9'). */
+  soft: string;
+  /** Vordefiniert: bearbeitbar, aber nicht löschbar. */
+  builtin?: boolean;
+}
 
 /** Status einer Aufgabe an einem bestimmten Tag. 'open' ist der Default und wird nicht gespeichert. */
 export type TaskStatus = 'open' | 'done' | 'ignored';
@@ -30,8 +43,10 @@ export interface TaskTemplate {
   order: number;
   /** ISO-Datum der Erstellung; die Aufgabe gilt erst ab diesem Tag. */
   createdAt: string;
-  /** Optionale Kategorie (Social/Leisure/Work). */
+  /** Optionale Kategorie. */
   category?: CategoryId;
+  /** Optionale Freitext-Notizen. */
+  notes?: string;
   archived?: boolean;
 }
 
