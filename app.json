@@ -3,7 +3,7 @@
     "name": "Taskly",
     "slug": "Taskly",
     "version": "1.0.0",
-    "owner": "REPLACE_WITH_EXPO_USERNAME",
+    "owner": "benewick",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "taskly",
@@ -12,7 +12,7 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/REPLACE_WITH_EAS_PROJECT_ID"
+      "url": "https://u.expo.dev/025f2a69-1222-4ec2-98bc-43dca4cd8387"
     },
     "ios": {
       "icon": "./assets/expo.icon"
@@ -49,7 +49,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
+        "projectId": "025f2a69-1222-4ec2-98bc-43dca4cd8387"
       }
     }
   }
