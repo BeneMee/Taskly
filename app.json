@@ -3,10 +3,17 @@
     "name": "Taskly",
     "slug": "Taskly",
     "version": "1.0.0",
+    "owner": "REPLACE_WITH_EXPO_USERNAME",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "taskly",
     "userInterfaceStyle": "automatic",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/REPLACE_WITH_EAS_PROJECT_ID"
+    },
     "ios": {
       "icon": "./assets/expo.icon"
     },
@@ -39,6 +46,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
+      }
     }
   }
 }
