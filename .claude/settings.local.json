@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/Anwender/Desktop/Claude Projects/Taskly\" && find . -type f -not -path './node_modules/*' -not -path './.git/*' | sort)",
+      "Bash(npm install *)",
+      "Bash(npx expo *)",
+      "Bash(node -e \"const p=require\\('./node_modules/react-native-reorderable-list/package.json'\\); console.log\\('reorderable-list', p.version\\); console.log\\('peerDeps', JSON.stringify\\(p.peerDependencies\\)\\); const r=require\\('./node_modules/react-native-reanimated/package.json'\\); console.log\\('reanimated', r.version\\); const g=require\\('./node_modules/react-native-gesture-handler/package.json'\\); console.log\\('gesture-handler', g.version\\);\")",
+      "Bash(node -e \"const m=require\\('./node_modules/react-native-reorderable-list'\\); console.log\\(Object.keys\\(m\\)\\);\")",
+      "Bash(npx jest *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(cd \"/c/Users/Anwender/Desktop/Claude Projects/Taskly\" && rm -rf src/constants src/hooks src/global.css && echo \"removed\" && find src -type f | sort)",
+      "Bash(cd \"/c/Users/Anwender/Desktop/Claude Projects/Taskly\" && rm -rf dist-verify && echo \"cleaned\" && echo \"===CLAUDE.md===\" && head -40 CLAUDE.md)",
+      "Read(//c/Users/Anwender/.claude/projects/**)",
+      "Read(//c/Users/Anwender/.claude/projects//**)",
+      "Bash(npm uninstall *)"
+    ]
+  }
+}
