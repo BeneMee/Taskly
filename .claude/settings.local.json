@@ -13,7 +13,17 @@
       "Bash(cd \"/c/Users/Anwender/Desktop/Claude Projects/Taskly\" && rm -rf dist-verify && echo \"cleaned\" && echo \"===CLAUDE.md===\" && head -40 CLAUDE.md)",
       "Read(//c/Users/Anwender/.claude/projects/**)",
       "Read(//c/Users/Anwender/.claude/projects//**)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(tee /tmp/expo.log)",
+      "Read(//tmp/**)",
+      "Bash(break)",
+      "Bash(sed 's/\\\\x1b\\\\[[0-9;]*m//g' /tmp/expo.log)",
+      "Bash(grep -vE \"^\\\\s*$\")",
+      "Bash(netstat -ano)",
+      "Bash(tasklist)",
+      "Bash(taskkill //F //PID 5924)",
+      "Bash(ipconfig)",
+      "mcp__e307e784-2b75-4ac1-8836-846793d2dd40__query-docs"
     ]
   }
 }
