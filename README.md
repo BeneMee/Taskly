@@ -1,56 +1,79 @@
-# Welcome to your Expo app 👋
+# Taskly 📋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Eine freundliche **Daily-Habit- / To-Do-App**, gebaut mit [Expo](https://expo.dev) (SDK 54) und lauffähig in **Expo Go** — ganz ohne Custom-Native-Build.
 
-## Get started
+Tägliche Routinen abhaken, Aufgaben Wochentagen und Kategorien zuordnen, den Fortschritt über Woche und Monat verfolgen und mit einem farbcodierten Login-Streak motiviert bleiben.
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+- **Wiederkehrende Aufgaben** (Habit-Style) — täglich oder an bestimmte Wochentage (Mo–So) gebunden
+- **Drei Zustände** pro Tag: offen · erledigt · *ignoriert* (neutral, zählt nicht in die Quote)
+- **Kategorien** mit farbigem Tag: 🟢 Social · 🟡 Leisure · 🔴 Work (optional)
+- **Farbcodierter Login-Streak** — 🟢 alles geschafft · 🟡 ≥ 50 % · 🔴 nur eingeloggt
+- **Statistik** — Wochen-Balkendiagramm + Monats-Kalender-Heatmap
+- **Drag & Drop** zum Sortieren der Aufgaben
+- **Lokal & offline** — alle Daten via AsyncStorage, kein Backend, kein Account
 
-2. Start the app
+## 🚀 Schnellstart
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+> Voraussetzung: **Node.js** und die **Expo Go**-App (SDK 54) auf dem Handy.
 
 ```bash
-npm run reset-project
+# 1. Abhängigkeiten installieren
+npm install
+
+# 2. Dev-Server starten
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Dann den QR-Code mit **Expo Go** scannen (Handy und PC im selben WLAN).
 
-### Other setup steps
+### Auf anderem Netzwerk / Gerät teilen
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+npx expo start --tunnel
+```
 
-## Learn more
+Erzeugt eine öffentliche `exp://…exp.direct`-URL, die in Expo Go von überall geöffnet werden kann (solange der Dev-Server läuft).
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🧪 Tests & Checks
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm test            # Jest-Unit-Tests (reine Logik in src/lib)
+npx tsc --noEmit    # TypeScript-Typecheck
+```
 
-## Join the community
+## 🧱 Tech-Stack
 
-Join our community of developers creating universal apps.
+| Zweck | Bibliothek |
+|---|---|
+| Framework | Expo SDK 54, React Native 0.81, TypeScript |
+| Navigation | expo-router (file-based) |
+| State + Persistenz | zustand + AsyncStorage |
+| Drag & Drop | react-native-reorderable-list (Reanimated 4) |
+| Diagramme | plain React Native Views (keine Chart-Lib) |
+| Datum | date-fns |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📁 Projektstruktur
+
+```
+src/
+  app/            expo-router Screens
+    (tabs)/       Heute · Aufgaben · Statistik
+    task/         Modals zum Anlegen/Bearbeiten
+  components/     UI-Komponenten (TaskRow, StreakBadge, CategoryTag, Charts …)
+  lib/            reine Logik (dates, tasks, completion, categories) + Tests
+  store/          zustand-Store mit Persistenz
+  theme/          zentrales Light-Theme
+docs/             Architektur & Requirements
+SPEC.md           Spezifikation
+```
+
+## 📝 Hinweise
+
+- Das Projekt ist bewusst auf **SDK 54** gepinnt (Expo Go des Entwicklers unterstützt nur SDK 54) und vermeidet Expo-Go-spezifischen Code, damit später ein EAS-Build oder Web-Export ohne Umbau möglich ist.
+- Mehr Details: [SPEC.md](SPEC.md) · [docs/architecture.md](docs/architecture.md)
+
+---
+
+🤖 Mitentwickelt mit [Claude Code](https://claude.com/claude-code)
